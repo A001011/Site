@@ -13,5 +13,8 @@ public class GreetingController {
         model.addAttribute("name", name);
         return "greeting";
     }
-
+    @RequestMapping("/Hello")
+ public String hello(){
+         return "Hello";
+    }
 }
