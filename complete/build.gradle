@@ -28,5 +28,17 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-devtools")
     testCompile("org.springframework.boot:spring-boot-starter-test")
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+    compile group: 'org.hsqldb', name: 'hsqldb'
+
+    //compile group: 'org.springframework', name: 'spring-aop', version: '5.0.2.RELEASE'
+    compile('org.springframework:spring-aop')
+// https://mvnrepository.com/artifact/org.springframework/spring-webmvc
+    compile group: 'org.springframework', name: 'spring-webmvc'
+
 }
 
