@@ -1,11 +1,14 @@
 package hello;
 
+import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.nio.charset.StandardCharsets;
 
 @Controller
 public class GreetingController {
@@ -32,8 +35,9 @@ public class GreetingController {
                                @RequestParam("last_name")String last_name) {
         if (pass.equals(pass_repeat)){
         System.out.println(email +" "+ pass +" "+ pass_repeat +" "+ first_name +" "+ last_name);
-        userService.create(new User(email,pass,first_name,last_name));
-        return "Hello";
+       final String hash= Hashing.sha256().hashString(pass, StandardCharsets.UTF_8).toString();
+        userService.create(new User(email,hash,first_name,last_name));
+        return "redirect:/login";
     }else{
         throw new IllegalArgumentException("repeat@ vhe hamapatasxanum passin");
     }
@@ -41,5 +45,12 @@ public class GreetingController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String Login(){
         return "login";
+    }
+    @RequestMapping(value="/login",method = RequestMethod.POST)
+    public String registerpost(@RequestParam("email") String email,
+                               @RequestParam("pass")String pass) {
+        System.out.println(userService.getByEmail(email));
+    return "redirect:/home";
+
     }
 }

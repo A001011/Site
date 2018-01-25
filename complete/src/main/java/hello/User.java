@@ -9,6 +9,27 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column
+    private String lastName;
+    @Column
+    private String pass;
+    @Column
+    private String passRepeat;
+    @Column
+    private String firstName;
+    @Column(unique =  true)
+    private String email;
+
+    public User(String email, String pass, String firstName, String lastName) {
+        this.lastName = lastName;
+        this.pass = pass;
+        this.firstName = firstName;
+        this.email = email;
+    }
+
+public User(){
+
+}
 
     public long getId() {
         return id;
@@ -58,15 +79,6 @@ public class User {
         this.email = email;
     }
 
-    public User(String lastName, String pass, String firstName, String email) {
-        this.lastName = lastName;
-        this.pass = pass;
-        this.firstName = firstName;
-        this.email = email;
-    }
-public User(){
-
-}
     @Override
     public String toString() {
         return "User{" +
@@ -97,17 +109,6 @@ public User(){
 
         return Objects.hash(id, lastName, pass, passRepeat, firstName, email);
     }
-
-    @Column
-    private String lastName;
-    @Column
-    private String pass;
-    @Column
-    private String passRepeat;
-    @Column
-    private String firstName;
-    @Column
-    private String email;
 
 
 
