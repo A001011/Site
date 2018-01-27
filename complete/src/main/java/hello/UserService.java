@@ -10,4 +10,7 @@ public interface UserService {
         User getById(long id);
 
         User getByEmail(String email);
+
+        boolean userExistByEmail(String email);
+
 }

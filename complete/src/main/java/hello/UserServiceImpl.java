@@ -9,13 +9,15 @@ import java.util.List;
 
 @Transactional
 @Repository
-public class UserServiceImpl implements UserService{
-@PersistenceContext
-private EntityManager entityManager;
+public class UserServiceImpl implements UserService {
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public void create(User user) {
         entityManager.persist(user);
     }
+
     @Override
     public void delete(User user) {
         if (entityManager.contains(user))
@@ -43,10 +45,12 @@ private EntityManager entityManager;
 
     @Override
     public User getByEmail(String email) {
-        List<User> resultList = entityManager.createQuery("from User where email=:email", User.class).setParameter("email", email).getResultList();
-     if (resultList.isEmpty()){
-         return null;
-        }else
-            return resultList.get(0);
+        return entityManager.createQuery("from User where email=:email", User.class).setParameter("email", email).getSingleResult();
+    }
+
+    @Override
+    public boolean userExistByEmail(String email) {
+        List<User> email1 = entityManager.createQuery("from User where email=:email", User.class).setParameter("email", email).getResultList();
+        return !email1.isEmpty();
     }
 }
