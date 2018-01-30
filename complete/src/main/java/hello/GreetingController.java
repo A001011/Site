@@ -1,18 +1,22 @@
 package hello;
 
 import com.google.common.hash.Hashing;
+import javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
-
+@SessionAttributes("user")
 @Controller
 public class GreetingController {
-
+public User intSession(){
+    return new User();
+}
     @Autowired
     private UserService userService;
 
@@ -44,19 +48,25 @@ public class GreetingController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String Login() {
+    public String Login(HttpServletResponse response) {
+        response.addCookie(new Cookie("session","test"));
         return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String registerpost(@RequestParam("email") String email,
-                               @RequestParam("pass") String pass) {
+    public String loginpost(@ModelAttribute("user")User sessionuser,
+                               @RequestParam("email") String email,
+                               @RequestParam("pass") String pass,
+                               @CookieValue("session")String cookie) {
         if (userService.userExistByEmail(email)) {
             User user = userService.getByEmail(email);
             String p = user.getPass();
             pass = Hashing.sha256().hashString(pass, StandardCharsets.UTF_8).toString();
             if (p.equals(pass)) {
-
+                sessionuser.setEmail(user.getEmail());
+                sessionuser.setFirstName(user.getFirstName());
+                sessionuser.setLastName(user.getLastName());
+                sessionuser.setId(user.getId());
                 return "redirect:/home";
             } else {
                 return "login";
@@ -68,7 +78,8 @@ public class GreetingController {
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String home() {
+    public String home(Model model,@ModelAttribute User user) {
+        model.addAttribute("email",user.getEmail());
         return "home";
     }
 }
