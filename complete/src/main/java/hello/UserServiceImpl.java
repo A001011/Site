@@ -53,4 +53,11 @@ public class UserServiceImpl implements UserService {
         List<User> email1 = entityManager.createQuery("from User where email=:email", User.class).setParameter("email", email).getResultList();
         return !email1.isEmpty();
     }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> list = entityManager.createQuery("from User", User.class).getResultList();
+
+        return list;
+    }
 }

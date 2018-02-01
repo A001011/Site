@@ -14,8 +14,6 @@ public class User {
     @Column
     private String pass;
     @Column
-    private String passRepeat;
-    @Column
     private String firstName;
     @Column(unique =  true)
     private String email;
@@ -55,13 +53,7 @@ public User(){
         this.pass = pass;
     }
 
-    public String getPassRepeat() {
-        return passRepeat;
-    }
 
-    public void setPassRepeat(String passRepeat) {
-        this.passRepeat = passRepeat;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -85,7 +77,6 @@ public User(){
                 "id=" + id +
                 ", lastName='" + lastName + '\'' +
                 ", pass='" + pass + '\'' +
-                ", passRepeat='" + passRepeat + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
@@ -99,7 +90,7 @@ public User(){
         return id == user.id &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(pass, user.pass) &&
-                Objects.equals(passRepeat, user.passRepeat) &&
+
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(email, user.email);
     }
@@ -107,7 +98,7 @@ public User(){
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, lastName, pass, passRepeat, firstName, email);
+        return Objects.hash(id, lastName, pass, firstName, email);
     }
 
 

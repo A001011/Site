@@ -11,12 +11,16 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 @SessionAttributes("user")
 @Controller
 public class GreetingController {
-public User intSession(){
-    return new User();
-}
+   @ModelAttribute
+    public User intSession() {
+        return new User();
+    }
+
     @Autowired
     private UserService userService;
 
@@ -49,15 +53,15 @@ public User intSession(){
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String Login(HttpServletResponse response) {
-        response.addCookie(new Cookie("session","test"));
+        response.addCookie(new Cookie("session", "test"));
         return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginpost(@ModelAttribute("user")User sessionuser,
-                               @RequestParam("email") String email,
-                               @RequestParam("pass") String pass,
-                               @CookieValue("session")String cookie) {
+    public String loginpost(@ModelAttribute("user") User sessionuser,
+                            @RequestParam("email") String email,
+                            @RequestParam("pass") String pass,
+                            @CookieValue("session") String cookie) {
         if (userService.userExistByEmail(email)) {
             User user = userService.getByEmail(email);
             String p = user.getPass();
@@ -76,10 +80,16 @@ public User intSession(){
         }
         return "login";
     }
-
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public String admin(Model model) {
+        List<User>userList = userService.getAllUsers();
+        model.addAttribute("list", userList);
+        return "admin";
+    }
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String home(Model model,@ModelAttribute User user) {
-        model.addAttribute("email",user.getEmail());
+    public String home(Model model, @ModelAttribute User user) {
+        model.addAttribute("email", user.getEmail());
         return "home";
     }
+
 }
